@@ -1,0 +1,1 @@
+# projecte_complet_2024_dwec
