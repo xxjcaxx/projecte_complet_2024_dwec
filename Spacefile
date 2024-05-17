@@ -1,0 +1,11 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: projecte2024
+    src: ./projecte
+    engine: static
+    primary: true
+    commands:
+      - npm run build
+    serve: dist
+    dev: npm run dev -- --port $PORT
