@@ -17,6 +17,8 @@ Vitest i msw
 
     npm install -D vitest   
     npm install msw@latest --save-dev 
+    npm instal
+    npm install --dev jsdom 
 
 Bootstrap
 

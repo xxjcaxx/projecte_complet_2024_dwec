@@ -1,4 +1,4 @@
-export { getSupabase }
+export { getSupabase, getData }
 
 
 const apikey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndnRwdWNveHZlZWJpemtuaGF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUzNTA0ODYsImV4cCI6MjAzMDkyNjQ4Nn0.rDdWANw1LN10BunTH8TKeIAfM-EMlWpTaNyxQSbe30k";
@@ -21,3 +21,7 @@ const getSupabase = async (table) => {
     }
 };
 
+
+const getData = (response) =>{
+        return response.json()
+}
