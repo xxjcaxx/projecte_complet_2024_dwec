@@ -8,20 +8,20 @@ const getSupabase = async (table) => {
         let response = await fetch(`https://ygvtpucoxveebizknhat.supabase.co/rest/v1/${table}?select=*`, {
             headers: {
                 apikey,
-                Authorization: `Bearer ${apikey}`
+                             Authorization: `Bearer ${apikey}`
             }
         });
-        if(!response.ok){
+        if (!response.ok) {
             return Promise.reject('Bad request')
         }
         return response;
     }
     catch (error) {
-        return  Promise.reject('Network Error'); 
+        return Promise.reject('Network Error');
     }
 };
 
 
-const getData = (response) =>{
-        return response.json()
+const getData = (response) => {
+    return response.json()
 }

@@ -30,6 +30,9 @@ Supabase
     API REST vs SDK
 tests
 Linter
+
+    npm install eslint --save-dev
+
 Prettier
 CI/CD
 Desplegament

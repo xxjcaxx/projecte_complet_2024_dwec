@@ -53,7 +53,39 @@ divWrapper.innerHTML =  movies.map((m,index) => `<div class="accordion-item">
 </button>
 <div id="panelsStayOpen-collapse${index}"  class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-heading${index}">
 <div class="accordion-body">
+<h3>Overview</h3>
 ${m.overview}
+<h3>Technical Data:</h3>
+<ul class="list-group">
+  <li class="list-group-item">Release Date: ${m.release_date}</li>
+  <li class="list-group-item">Revenue: ${m.revenue}</li>
+  <li class="list-group-item">Runtime: ${m.runtime}</li>
+  <li class="list-group-item">Tagline: ${m.tagline}</li>
+  <li class="list-group-item">Vote Average: ${m.vote_average}</li>
+  <li class="list-group-item">Vote Count: ${m.vote_count}</li>
+  <li class="list-group-item">Year: ${m.year}</li>
+</ul>
+<h3>Genres</h3>
+<div class="btn-group" role="group" aria-label="Basic example">
+  ${JSON.parse( m.genre.replace(/'/g, '"'))
+   .map(g => `<button type="button" class="btn btn-primary" data-genre="${g}">${g}</button>`).join('')
+  }
+
+</div>
+<h3>Companies</h3>
+<div class="btn-group" role="group" aria-label="Basic example">
+  ${console.log(m.companies) && JSON.parse( m.companies.replace(/'/g, '"'))
+   .map(g => `<button type="button" class="btn btn-primary" data-company="${g}">${g}</button>`).join('') 
+  }
+
+</div>
+<h3>Countries</h3>
+<div class="btn-group" role="group" aria-label="Basic example">
+  ${JSON.parse( m.countries.replace(/'/g, '"'))
+   .map(g => `<button type="button" class="btn btn-primary" data-country="${g}">${g}</button>`).join('')
+  }
+
+</div>
 </div>
 </div>
 
