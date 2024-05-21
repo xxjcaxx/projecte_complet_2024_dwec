@@ -35,6 +35,8 @@ Linter
 
 Prettier
 CI/CD
+https://docs.github.com/en/actions/quickstart#creating-your-first-workflow 
+
 Desplegament
 
 

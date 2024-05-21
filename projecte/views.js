@@ -1,8 +1,8 @@
-export {buildMoviesComponent,buildMenu}
+export { buildMoviesComponent, buildMenu };
 
 const buildMenu = () => {
-    const divWrapper = document.createElement('div');
-    const menu = `<nav class="navbar navbar-expand-lg bg-light">
+  const divWrapper = document.createElement("div");
+  const menu = `<nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Movies</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,15 +38,16 @@ const buildMenu = () => {
     </div>
   </div>
 </nav>`;
-divWrapper.innerHTML = menu;
-return divWrapper.querySelector('nav');
-}
+  divWrapper.innerHTML = menu;
+  return divWrapper.querySelector("nav");
+};
 
 const buildMoviesComponent = (movies) => {
-
-const divWrapper = document.createElement('div');
-divWrapper.classList.add('accordion');
-divWrapper.innerHTML =  movies.map((m,index) => `<div class="accordion-item">
+  const divWrapper = document.createElement("div");
+  divWrapper.classList.add("accordion");
+  divWrapper.innerHTML = movies
+    .map(
+      (m, index) => `<div class="accordion-item">
 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse${index}" aria-expanded="true" aria-controls="panelsStayOpen-collapse${index}">
     
 <h2 class="accordion-header" id="panelsStayOpen-heading${index}"></h2>${m.original_title}
@@ -67,29 +68,42 @@ ${m.overview}
 </ul>
 <h3>Genres</h3>
 <div class="btn-group" role="group" aria-label="Basic example">
-  ${JSON.parse( m.genre.replace(/'/g, '"'))
-   .map(g => `<button type="button" class="btn btn-primary" data-genre="${g}">${g}</button>`).join('')
-  }
+  ${JSON.parse(m.genre.replace(/'/g, '"'))
+    .map(
+      (g) =>
+        `<button type="button" class="btn btn-primary" data-genre="${g}">${g}</button>`,
+    )
+    .join("")}
 
 </div>
 <h3>Companies</h3>
 <div class="btn-group" role="group" aria-label="Basic example">
-  ${console.log(m.companies) && JSON.parse( m.companies.replace(/'/g, '"'))
-   .map(g => `<button type="button" class="btn btn-primary" data-company="${g}">${g}</button>`).join('') 
+  ${
+    console.log(m.companies) &&
+    JSON.parse(m.companies.replace(/'/g, '"'))
+      .map(
+        (g) =>
+          `<button type="button" class="btn btn-primary" data-company="${g}">${g}</button>`,
+      )
+      .join("")
   }
 
 </div>
 <h3>Countries</h3>
 <div class="btn-group" role="group" aria-label="Basic example">
-  ${JSON.parse( m.countries.replace(/'/g, '"'))
-   .map(g => `<button type="button" class="btn btn-primary" data-country="${g}">${g}</button>`).join('')
-  }
+  ${JSON.parse(m.countries.replace(/'/g, '"'))
+    .map(
+      (g) =>
+        `<button type="button" class="btn btn-primary" data-country="${g}">${g}</button>`,
+    )
+    .join("")}
 
 </div>
 </div>
 </div>
 
-</div>`).join('');
-return divWrapper;
-
-}
+</div>`,
+    )
+    .join("");
+  return divWrapper;
+};
