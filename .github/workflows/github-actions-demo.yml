@@ -16,3 +16,31 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+  Test:
+        runs-on: ubuntu-22.04
+        strategy:
+         matrix:
+           node-version: ['20.x']
+        steps:
+        - uses: actions/checkout@v4
+        - name: Use Node.js ${{ matrix.node-version }}
+          uses: actions/setup-node@v4
+          with:
+            node-version: ${{ matrix.node-version }}  
+        - name: Install dependencies frontend
+          working-directory: projecte
+          run: npm ci
+        - name: nmp run test
+          working-directory: projecte
+          run: npm run test
+  push-to-space:
+            runs-on: ubuntu-22.04
+            steps:
+              - uses: actions/checkout@v4
+              - name: Deta Space Deployment Github Action
+                uses: neobrains/space-pipe@v0.5
+                with:
+                  access_token: ${{ secrets.ACCESS_TOKEN }}
+                  project_id: ${{ secrets.PROJECT_ID }}
+                  space_push: true
+                  list_on_discovery: true
