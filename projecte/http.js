@@ -26,3 +26,5 @@ const getSupabase = async (table) => {
 const getData = (response) => {
   return response.json();
 };
+
+

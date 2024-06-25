@@ -43,7 +43,7 @@ describe("http service", () => {
       expect(response.status).toBe(200);
       expect(response.statusText).toBe("OK");
     });
-    test("getSupabase should return an error", async () => {
+    test("getSupabase with bad url should return an error", async () => {
       try {
         await _http.getSupabase("fallo");
         throw new Error("La función debería haber lanzado un error");
