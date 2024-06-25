@@ -9,6 +9,10 @@ Deta
     space new
     space dev
 
+    Si ho estem fen en un altre pc
+
+    space link <id>
+
 Vite
 
     npm create vite@latest projecte -- --template vanilla

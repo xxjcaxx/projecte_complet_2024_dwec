@@ -42,16 +42,11 @@ const buildMenu = () => {
   return divWrapper.querySelector("nav");
 };
 
-const stringToArray = (string) => {
-  //console.log(string);
-  return string.split(",");
-};
 
 const buildMoviesComponent = (movies) => {
   const divWrapper = document.createElement("div");
   divWrapper.classList.add("accordion");
   divWrapper.innerHTML = movies
-    .filter((m) => m.original_title.length == 3)
     .map(
       (m, index) => `<div class="accordion-item">
    
@@ -77,7 +72,7 @@ ${m.overview}
 </ul>
 <h3>Genres</h3>
 <div class="btn-group" role="group" aria-label="Basic example">
-  ${stringToArray(m.genre)
+  ${m.genre
     .map(
       (g) =>
         `<button type="button" class="btn btn-primary" data-genre="${g}">${g}</button>`,
@@ -87,7 +82,7 @@ ${m.overview}
 </div>
 <h3>Companies</h3>
 <div class="btn-group" role="group" aria-label="Basic example">
-  ${stringToArray(m.companies)
+  ${m.companies
     .map(
       (g) =>
         `<button type="button" class="btn btn-primary" data-company="${g}">${g}</button>`,
@@ -97,7 +92,7 @@ ${m.overview}
 </div>
 <h3>Countries</h3>
 <div class="btn-group" role="group" aria-label="Basic example">
-  ${stringToArray(m.countries)
+  ${m.countries
     .map(
       (g) =>
         `<button type="button" class="btn btn-primary" data-country="${g}">${g}</button>`,
