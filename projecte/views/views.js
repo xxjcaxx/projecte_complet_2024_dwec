@@ -44,13 +44,14 @@ const buildMenu = () => {
 
 const stringToArray = (string) => {
   //console.log(string);
-  return string.split(',');
+  return string.split(",");
 };
 
 const buildMoviesComponent = (movies) => {
   const divWrapper = document.createElement("div");
   divWrapper.classList.add("accordion");
-  divWrapper.innerHTML = movies.filter(m => m.original_title.length == 3)
+  divWrapper.innerHTML = movies
+    .filter((m) => m.original_title.length == 3)
     .map(
       (m, index) => `<div class="accordion-item">
    
@@ -87,12 +88,11 @@ ${m.overview}
 <h3>Companies</h3>
 <div class="btn-group" role="group" aria-label="Basic example">
   ${stringToArray(m.companies)
-      .map(
-        (g) =>
-          `<button type="button" class="btn btn-primary" data-company="${g}">${g}</button>`,
-      )
-      .join("")
-  }
+    .map(
+      (g) =>
+        `<button type="button" class="btn btn-primary" data-company="${g}">${g}</button>`,
+    )
+    .join("")}
 
 </div>
 <h3>Countries</h3>

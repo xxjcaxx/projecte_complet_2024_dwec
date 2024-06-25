@@ -6,8 +6,8 @@ import { describe, expect, test, beforeAll, afterAll } from "vitest";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 
-import * as _http from "../http";
-import * as _views from "../views";
+import * as _http from "../models/http";
+import * as _views from "../views/views";
 import { exampleMovies } from "./examplemovies";
 
 describe("http service", () => {
