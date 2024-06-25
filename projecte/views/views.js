@@ -42,16 +42,24 @@ const buildMenu = () => {
   return divWrapper.querySelector("nav");
 };
 
+const stringToArray = (string) => {
+  //console.log(string);
+  return string.split(',');
+};
+
 const buildMoviesComponent = (movies) => {
   const divWrapper = document.createElement("div");
   divWrapper.classList.add("accordion");
-  divWrapper.innerHTML = movies
+  divWrapper.innerHTML = movies.filter(m => m.original_title.length == 3)
     .map(
       (m, index) => `<div class="accordion-item">
+   
+<h2 class="accordion-header" id="panelsStayOpen-heading${index}">
 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse${index}" aria-expanded="true" aria-controls="panelsStayOpen-collapse${index}">
-    
-<h2 class="accordion-header" id="panelsStayOpen-heading${index}"></h2>${m.original_title}
+${m.original_title}
 </button>
+</h2>
+
 <div id="panelsStayOpen-collapse${index}"  class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-heading${index}">
 <div class="accordion-body">
 <h3>Overview</h3>
@@ -68,7 +76,7 @@ ${m.overview}
 </ul>
 <h3>Genres</h3>
 <div class="btn-group" role="group" aria-label="Basic example">
-  ${JSON.parse(m.genre.replace(/'/g, '"'))
+  ${stringToArray(m.genre)
     .map(
       (g) =>
         `<button type="button" class="btn btn-primary" data-genre="${g}">${g}</button>`,
@@ -78,9 +86,7 @@ ${m.overview}
 </div>
 <h3>Companies</h3>
 <div class="btn-group" role="group" aria-label="Basic example">
-  ${
-    console.log(m.companies) &&
-    JSON.parse(m.companies.replace(/'/g, '"'))
+  ${stringToArray(m.companies)
       .map(
         (g) =>
           `<button type="button" class="btn btn-primary" data-company="${g}">${g}</button>`,
@@ -91,7 +97,7 @@ ${m.overview}
 </div>
 <h3>Countries</h3>
 <div class="btn-group" role="group" aria-label="Basic example">
-  ${JSON.parse(m.countries.replace(/'/g, '"'))
+  ${stringToArray(m.countries)
     .map(
       (g) =>
         `<button type="button" class="btn btn-primary" data-country="${g}">${g}</button>`,

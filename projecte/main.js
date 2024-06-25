@@ -1,8 +1,8 @@
 import "./styles.scss";
 //import * as bootstrap from "bootstrap";
-import { buildMenu, buildMoviesComponent } from "./views";
+import { buildMenu, buildMoviesComponent } from "./views/views";
 //import { exampleMovies } from "./tests/examplemovies";
-import { getData, getSupabase } from "./http";
+import { getData, getSupabase } from "./models/http";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const menuDiv = document.querySelector("#menu");
