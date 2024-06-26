@@ -42,7 +42,6 @@ const buildMenu = () => {
   return divWrapper.querySelector("nav");
 };
 
-
 const buildMoviesComponent = (movies) => {
   const divWrapper = document.createElement("div");
   divWrapper.classList.add("accordion");
@@ -75,7 +74,7 @@ ${m.overview}
   ${m.genre
     .map(
       (g) =>
-        `<button type="button" class="btn btn-primary" data-genre="${g}">${g}</button>`,
+        `<button type="button" class="btn btn-primary" data-genre="${g}">${g}</button>`
     )
     .join("")}
 
@@ -85,7 +84,7 @@ ${m.overview}
   ${m.companies
     .map(
       (g) =>
-        `<button type="button" class="btn btn-primary" data-company="${g}">${g}</button>`,
+        `<button type="button" class="btn btn-primary" data-company="${g}">${g}</button>`
     )
     .join("")}
 
@@ -95,7 +94,7 @@ ${m.overview}
   ${m.countries
     .map(
       (g) =>
-        `<button type="button" class="btn btn-primary" data-country="${g}">${g}</button>`,
+        `<button type="button" class="btn btn-primary" data-country="${g}">${g}</button>`
     )
     .join("")}
 
@@ -103,8 +102,12 @@ ${m.overview}
 </div>
 </div>
 
-</div>`,
+</div>`
     )
     .join("");
+
+    divWrapper.querySelectorAll('button[data-genre]').forEach(button => button.addEventListener('click',()=>{
+      window.location.hash = `#/movies/genre/${button.dataset.genre}`;
+    }));
   return divWrapper;
 };

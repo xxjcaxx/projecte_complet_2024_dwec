@@ -1,12 +1,12 @@
-export { getSupabase, getData, stringToArray };
+export { getSupabase, getData };
 
 const apikey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndnRwdWNveHZlZWJpemtuaGF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUzNTA0ODYsImV4cCI6MjAzMDkyNjQ4Nn0.rDdWANw1LN10BunTH8TKeIAfM-EMlWpTaNyxQSbe30k";
 
-const getSupabase = async (table) => {
+const getSupabase = async (table, columns, search) => {
   try {
     let response = await fetch(
-      `https://ygvtpucoxveebizknhat.supabase.co/rest/v1/${table}?select=*`,
+      `https://ygvtpucoxveebizknhat.supabase.co/rest/v1/${table}?select=${columns ? columns : '*'}${search ? `&${search}` : ''}`,
       {
         headers: {
           apikey,
@@ -28,8 +28,4 @@ const getData = (response) => {
 };
 
 
-const stringToArray = (string) => {
-  let convertedString = string.replace(/',/g, '",').replace(/ '/g, ' "').replace(/\['/g, '["').replace(/'\]/g, '"]');
-  console.log(string, convertedString);
-  return JSON.parse(convertedString);
-};
+

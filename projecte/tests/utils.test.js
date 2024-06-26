@@ -8,6 +8,7 @@ import { setupServer } from "msw/node";
 
 import * as _http from "../models/http";
 import * as _views from "../views/views";
+import * as _movies from "../models/movies"
 import { exampleMovies } from "./examplemovies";
 
 describe("http service", () => {
@@ -120,17 +121,73 @@ describe("http service", () => {
 
 describe("Views", () => {
   describe("moviesComponent", async () => {
-   // let moviesComponent = _views.buildMoviesComponent(exampleMovies);
+    let moviesComponent = _views.buildMoviesComponent(_movies.parseMovies(exampleMovies));
     test("moviesComponent should return an element", () => {
-  //    expect(moviesComponent).toBeInstanceOf(Element);
+      expect(moviesComponent).toBeInstanceOf(Element);
     });
   });
   describe("stringToArray", async () => {
     test("stringToArray should return an Array of movies", () => {
       let complexArray =  `['Procirep', 'Constellation Productions', 'France 3 Cinéma', 'Claudie Ossard Productions', 'Eurimages', 'MEDIA Programme of the European Union', 'Cofimage 5', 'Televisión Española (TVE)', 'Tele München Fernseh Produktionsgesellschaft (TMG)', "Club d'Investissement Média", 'Canal+ España', 'Elías Querejeta Producciones Cinematográficas S.L.', 'Centre National de la Cinématographie (CNC)', 'Victoires Productions', 'Constellation', 'Lumière Pictures', 'Canal+', 'Studio Image', 'Cofimage 4', 'Ossane', 'Phoenix Images']`;
-      let result = _http.stringToArray(complexArray);
+      let result = _movies.stringToArray(complexArray);
       expect(result).toBeInstanceOf(Array);
       expect(result.length).toBe(21);
     });
   });
+});
+
+describe("Movies model", () => {
+
+    test("stringToArray should return an Array of movies", () => {
+      let complexArray =  `['Procirep', 'Constellation Productions', 'France 3 Cinéma', 'Claudie Ossard Productions', 'Eurimages', 'MEDIA Programme of the European Union', 'Cofimage 5', 'Televisión Española (TVE)', 'Tele München Fernseh Produktionsgesellschaft (TMG)', "Club d'Investissement Média", 'Canal+ España', 'Elías Querejeta Producciones Cinematográficas S.L.', 'Centre National de la Cinématographie (CNC)', 'Victoires Productions', 'Constellation', 'Lumière Pictures', 'Canal+', 'Studio Image', 'Cofimage 4', 'Ossane', 'Phoenix Images']`;
+      let result = _movies.stringToArray(complexArray);
+      expect(result).toBeInstanceOf(Array);
+      expect(result.length).toBe(21);
+    });
+  
+ 
+    test("parseMovies should return an Array of movies with arrays parsed", () => {
+        let result = _movies.parseMovies(exampleMovies);
+      expect(result).toBeInstanceOf(Array);
+      expect(result.length).toBe(4);
+      expect(result.every(m=> m.genre instanceof Array)).toBe(true);
+      expect(result.every(m=> m.companies instanceof Array)).toBe(true);
+      expect(result.every(m=> m.countries instanceof Array)).toBe(true);
+    });
+
+    test("parseMovies should return an Array of movies with arrays parsed", () => {
+        let result = _movies.parseMovies(exampleMovies);
+      expect(result).toBeInstanceOf(Array);
+      expect(result.length).toBe(4);
+      expect(result.every(m=> m.genre instanceof Array)).toBe(true);
+      expect(result.every(m=> m.companies instanceof Array)).toBe(true);
+      expect(result.every(m=> m.countries instanceof Array)).toBe(true);
+    });
+
+    describe("getMovies",()=>{
+      const server = setupServer(
+        http.get(
+          "https://ygvtpucoxveebizknhat.supabase.co/rest/v1/movies",
+          // eslint-disable-next-line
+          (req, res, ctx) => {
+            return HttpResponse.json(exampleMovies);
+          },
+        ),
+      );
+      beforeAll(() => {
+        server.listen({
+          onUnhandledRequest: "bypass",
+        });
+      });
+      afterAll(() => server.close());
+      test("getMovies should return a promise that returns an array of parsed movies", async () => {
+        let promise = _movies.getMovies();
+        expect(promise).toBeInstanceOf(Promise);
+        let movies = await promise;
+        expect(movies).toBeInstanceOf(Array);
+        expect(movies.length).toBe(4);
+        expect(movies[0].genre).toBeInstanceOf(Array);
+    });
+    });
+
 });
