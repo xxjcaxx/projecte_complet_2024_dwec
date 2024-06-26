@@ -1,22 +1,32 @@
-export {stringToArray, parseMovies, getMovies}
+export { stringToArray, parseMovies, getMovies, moviesSubject }
 import { getData, getSupabase } from "./http";
+import { _ } from "../utils/functionals";
+// eslint-disable-next-line no-unused-vars
+import {from, tap, map, switchMap, Subject} from "rxjs";
 
 const stringToArray = (string) => {
-    let convertedString = string.replace(/',/g, '",').replace(/ '/g, ' "').replace(/\['/g, '["').replace(/'\]/g, '"]');
-    return JSON.parse(convertedString);
-  };
-  
-const parseMovies = (movies) => {
-    let moviesCopy = structuredClone(movies);
-    moviesCopy.forEach(m => { 
-    m.genre = stringToArray(m.genre);
-    m.companies = stringToArray(m.companies);
-    m.countries = stringToArray(m.countries);
-  });
-  return moviesCopy;
-}  
+  let convertedString = string.replace(/',/g, '",').replace(/ '/g, ' "').replace(/\['/g, '["').replace(/'\]/g, '"]');
+  return JSON.parse(convertedString);
+};
 
-const getMovies = async (search) => {
-    const movies = parseMovies(await getData(await getSupabase("movies","*",search)));
-    return movies;
+
+const parseArrays = (movie) => {
+  const movieCopy = structuredClone(movie);
+  ['genre', 'companies', 'countries']
+    .forEach(a => movieCopy[a] = stringToArray(movieCopy[a]));
+  return movieCopy;
 }
+
+const parseMovies =  _.compose(
+    _.curriedMap(parseArrays),
+  );
+
+const moviesSubject = new Subject();
+const getMovies = (search) => {
+  let subscription = from(getSupabase("movies", "*", search))
+.pipe(
+  switchMap(getData),
+  map(parseMovies),
+).subscribe(movies => { moviesSubject.next(movies); subscription.unsubscribe()});
+}
+ 

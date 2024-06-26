@@ -23,9 +23,7 @@ const getSupabase = async (table, columns, search) => {
   }
 };
 
-const getData = (response) => {
-  return response.json();
-};
+const getData = (response) => response.json();
 
 
 

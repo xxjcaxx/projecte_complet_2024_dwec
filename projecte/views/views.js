@@ -1,3 +1,6 @@
+import { fromEvent, map, distinctUntilChanged, debounceTime , tap} from "rxjs";
+import { getMovies } from "../models/movies";
+
 export { buildMoviesComponent, buildMenu };
 
 const buildMenu = () => {
@@ -32,13 +35,19 @@ const buildMenu = () => {
         </li>
       </ul>
       <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <input id="searchInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
     </div>
   </div>
 </nav>`;
   divWrapper.innerHTML = menu;
+  fromEvent(divWrapper.querySelector('#searchInput'),'keyup').pipe(
+    map((event) => event.target.value),
+    tap(text => console.log(text)),
+    distinctUntilChanged(), //Para evitar keyups en teclas que no cambian el value
+    debounceTime(300) // Para no saturar la búsqueda en Supabase
+  ).subscribe(searchText => getMovies(`title=ilike.*${searchText}*`));
   return divWrapper.querySelector("nav");
 };
 
