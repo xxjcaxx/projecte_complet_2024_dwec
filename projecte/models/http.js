@@ -6,7 +6,7 @@ const apikey =
 const getSupabase = async (table, columns, search) => {
   try {
     let response = await fetch(
-      `https://ygvtpucoxveebizknhat.supabase.co/rest/v1/${table}?select=${columns ? columns : '*'}${search ? `&${search}` : ''}`,
+      `https://ygvtpucoxveebizknhat.supabase.co/rest/v1/${table}?select=${columns ? columns : "*"}${search ? `&${search}` : ""}`,
       {
         headers: {
           apikey,
@@ -24,6 +24,3 @@ const getSupabase = async (table, columns, search) => {
 };
 
 const getData = (response) => response.json();
-
-
-

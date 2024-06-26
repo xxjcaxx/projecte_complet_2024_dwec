@@ -1,4 +1,4 @@
-import { fromEvent, map, distinctUntilChanged, debounceTime , tap} from "rxjs";
+import { fromEvent, map, distinctUntilChanged, debounceTime, tap } from "rxjs";
 import { getMovies } from "../models/movies";
 
 export { buildMoviesComponent, buildMenu };
@@ -42,12 +42,14 @@ const buildMenu = () => {
   </div>
 </nav>`;
   divWrapper.innerHTML = menu;
-  fromEvent(divWrapper.querySelector('#searchInput'),'keyup').pipe(
-    map((event) => event.target.value),
-    tap(text => console.log(text)),
-    distinctUntilChanged(), //Para evitar keyups en teclas que no cambian el value
-    debounceTime(300) // Para no saturar la búsqueda en Supabase
-  ).subscribe(searchText => getMovies(`title=ilike.*${searchText}*`));
+  fromEvent(divWrapper.querySelector("#searchInput"), "keyup")
+    .pipe(
+      map((event) => event.target.value),
+      tap((text) => console.log(text)),
+      distinctUntilChanged(), //Para evitar keyups en teclas que no cambian el value
+      debounceTime(300), // Para no saturar la búsqueda en Supabase
+    )
+    .subscribe((searchText) => getMovies(`title=ilike.*${searchText}*`));
   return divWrapper.querySelector("nav");
 };
 
@@ -83,7 +85,7 @@ ${m.overview}
   ${m.genre
     .map(
       (g) =>
-        `<button type="button" class="btn btn-primary" data-genre="${g}">${g}</button>`
+        `<button type="button" class="btn btn-primary" data-genre="${g}">${g}</button>`,
     )
     .join("")}
 
@@ -93,7 +95,7 @@ ${m.overview}
   ${m.companies
     .map(
       (g) =>
-        `<button type="button" class="btn btn-primary" data-company="${g}">${g}</button>`
+        `<button type="button" class="btn btn-primary" data-company="${g}">${g}</button>`,
     )
     .join("")}
 
@@ -103,7 +105,7 @@ ${m.overview}
   ${m.countries
     .map(
       (g) =>
-        `<button type="button" class="btn btn-primary" data-country="${g}">${g}</button>`
+        `<button type="button" class="btn btn-primary" data-country="${g}">${g}</button>`,
     )
     .join("")}
 
@@ -111,12 +113,14 @@ ${m.overview}
 </div>
 </div>
 
-</div>`
+</div>`,
     )
     .join("");
 
-    divWrapper.querySelectorAll('button[data-genre]').forEach(button => button.addEventListener('click',()=>{
+  divWrapper.querySelectorAll("button[data-genre]").forEach((button) =>
+    button.addEventListener("click", () => {
       window.location.hash = `#/movies/genre/${button.dataset.genre}`;
-    }));
+    }),
+  );
   return divWrapper;
 };

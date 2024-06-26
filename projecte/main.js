@@ -6,12 +6,12 @@ import { buildMenu, buildMoviesComponent } from "./views/views";
 //import { getData, getSupabase } from "./models/http";
 import { getMovies, moviesSubject } from "./models/movies";
 
-
-
-const fillElement = (container) => (content) => { container.innerHTML = ""; container.append(content); }
+const fillElement = (container) => (content) => {
+  container.innerHTML = "";
+  container.append(content);
+};
 
 let subscription = null;
-
 
 const router = async (route, container) => {
   if (subscription) {
@@ -22,7 +22,7 @@ const router = async (route, container) => {
   if (/#\/movies\/genre\/.+/.test(route)) {
     let genreID = route.split("/")[3];
     getMovies(`genre=ilike.*${genreID}*`);
-    subscription = moviesSubject.subscribe(movies => {
+    subscription = moviesSubject.subscribe((movies) => {
       fillContainer(buildMoviesComponent(movies));
     });
   }
@@ -31,23 +31,22 @@ const router = async (route, container) => {
     switch (route) {
       case "#/":
         getMovies();
-          subscription = moviesSubject.subscribe(movies => {
+        subscription = moviesSubject.subscribe((movies) => {
           fillContainer(buildMoviesComponent(movies));
         });
         break;
       case "#/movies":
         getMovies();
-        subscription = moviesSubject.subscribe(movies => {
-        fillContainer(buildMoviesComponent(movies));
-      });
+        subscription = moviesSubject.subscribe((movies) => {
+          fillContainer(buildMoviesComponent(movies));
+        });
         break;
       // Añadir más rutas según sea necesario
       default:
-        console.log('404 page not found');
+        console.log("404 page not found");
     }
   }
 };
-
 
 document.addEventListener("DOMContentLoaded", async () => {
   const menuDiv = document.querySelector("#menu");
@@ -59,6 +58,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("hashchange", () => {
     router(window.location.hash, containerDiv);
   });
-
-
 });
