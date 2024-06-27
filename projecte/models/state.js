@@ -1,11 +1,6 @@
 import { BehaviorSubject } from "rxjs";
 
 export const state = new BehaviorSubject({
-  search: [],
-  function: () => {},
+  search: '',
+  route: {}
 });
-/*
-let stateSubscription = state.subscribe(currentState => {
-  
-});
-  */

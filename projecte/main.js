@@ -5,6 +5,7 @@ import { buildMenu, buildMoviesComponent } from "./views/views";
 //import { exampleMovies } from "./tests/examplemovies";
 //import { getData, getSupabase } from "./models/http";
 import { getMovies, moviesSubject } from "./models/movies";
+import {state} from "./models/state";
 
 const fillElement = (container) => (content) => {
   container.innerHTML = "";
@@ -12,6 +13,12 @@ const fillElement = (container) => (content) => {
 };
 
 let subscription = null;
+
+
+let stateSubscription = state.subscribe(currentState => {
+  getMovies(`${ 'criteria' in currentState.route ? `${currentState.route.criteria}=ilike.*${currentState.route.value}*` : '' }${currentState.search}`);
+});
+
 
 const router = async (route, container) => {
   if (subscription) {
@@ -21,7 +28,7 @@ const router = async (route, container) => {
   // Rutas con expresiones regulares
   if (/#\/movies\/genre\/.+/.test(route)) {
     let genreID = route.split("/")[3];
-    getMovies(`genre=ilike.*${genreID}*`);
+    state.next({search: '', route: {criteria: 'genre', value: genreID}});
     subscription = moviesSubject.subscribe((movies) => {
       fillContainer(buildMoviesComponent(movies));
     });
@@ -30,13 +37,13 @@ const router = async (route, container) => {
   else {
     switch (route) {
       case "#/":
-        getMovies();
+        state.next({search: '', route: {}});
         subscription = moviesSubject.subscribe((movies) => {
           fillContainer(buildMoviesComponent(movies));
         });
         break;
       case "#/movies":
-        getMovies();
+        state.next({search: '', route: {}});
         subscription = moviesSubject.subscribe((movies) => {
           fillContainer(buildMoviesComponent(movies));
         });

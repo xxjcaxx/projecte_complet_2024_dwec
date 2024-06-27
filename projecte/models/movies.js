@@ -24,6 +24,7 @@ const parseArrays = (movie) => {
 const parseMovies = _.compose(_.curriedMap(parseArrays));
 
 const moviesSubject = new Subject();
+
 const getMovies = (search) => {
   let subscription = from(getSupabase("movies", "*", search))
     .pipe(switchMap(getData), map(parseMovies))

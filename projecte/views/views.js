@@ -1,5 +1,6 @@
 import { fromEvent, map, distinctUntilChanged, debounceTime, tap } from "rxjs";
-import { getMovies } from "../models/movies";
+//import { getMovies } from "../models/movies";
+import {state} from "../models/state";
 
 export { buildMoviesComponent, buildMenu };
 
@@ -49,7 +50,7 @@ const buildMenu = () => {
       distinctUntilChanged(), //Para evitar keyups en teclas que no cambian el value
       debounceTime(300), // Para no saturar la búsqueda en Supabase
     )
-    .subscribe((searchText) => getMovies(`title=ilike.*${searchText}*`));
+    .subscribe((searchText) => state.next({search: searchText.length > 0 ? `&title=ilike.*${searchText}*` : '', route: {... state.getValue().route}}));
   return divWrapper.querySelector("nav");
 };
 
