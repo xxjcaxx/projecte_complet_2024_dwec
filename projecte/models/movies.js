@@ -5,11 +5,11 @@ import { _ } from "../utils/functionals";
 import { from, tap, map, switchMap, Subject } from "rxjs";
 
 const stringToArray = (string) => {
+
   let convertedString = string
-    .replace(/',/g, '",')
-    .replace(/ '/g, ' "')
-    .replace(/\['/g, '["')
-    .replace(/'\]/g, '"]');
+    .replace(/'/g, '"')
+    .replace(/"([^"]*)",/g, (match) => { console.log(match); return match.replace(/'/g, "\\'"); });
+    console.log(string,convertedString);
   return JSON.parse(convertedString);
 };
 

@@ -57,7 +57,16 @@ const buildMenu = () => {
 const buildMoviesComponent = (movies) => {
   const divWrapper = document.createElement("div");
   divWrapper.classList.add("accordion");
-  divWrapper.innerHTML = movies
+  divWrapper.innerHTML = `
+  <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Movies</li>
+    ${'criteria' in  state.getValue().route ? `<li class="breadcrumb-item active" aria-current="page">${state.getValue().route.value}</li>` : '<li class="breadcrumb-item active" aria-current="page">All</li>' }
+    ${state.getValue().search != '' ? `<li class="breadcrumb-item active" aria-current="page">${state.getValue().search}</li>` : '' }
+  </ol>
+</nav>
+
+  `+movies
     .map(
       (m, index) => `<div class="accordion-item">
    

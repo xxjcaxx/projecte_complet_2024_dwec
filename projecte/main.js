@@ -21,6 +21,7 @@ let stateSubscription = state.subscribe(currentState => {
 
 
 const router = async (route, container) => {
+  console.log(route);
   if (subscription) {
     subscription.unsubscribe();
   }
