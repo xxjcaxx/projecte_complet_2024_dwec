@@ -4,7 +4,7 @@ export { profileForm };
 
 const profileForm = () => {
   // let dataProfile = JSON.parse(localStorage.getItem('dataProfile'));
-  const divProfile = document.createElement('div');
+  const divProfile = document.createElement("div");
 
   const profileObservable = getProfile();
   profileObservable.subscribe((dataProfile) => {
@@ -21,7 +21,7 @@ const profileForm = () => {
         name="email"
         required
         readonly
-        value="${localStorage.getItem('email')}"
+        value="${localStorage.getItem("email")}"
       />
 
       <label for="psw"><b>Password</b></label>
@@ -68,7 +68,7 @@ const profileForm = () => {
         value = "${dataProfile.website}"
       />
   <div>
-      <img class="avatar_profile" style="max-width: 200px" id="avatar_prev" src="${dataProfile.avatar_blob ? dataProfile.avatar_blob : ''}"/>
+      <img class="avatar_profile" style="max-width: 200px" id="avatar_prev" src="${dataProfile.avatar_blob ? dataProfile.avatar_blob : ""}"/>
 </div>
       <label for="avatar"><b>Avatar</b></label>
       <input
@@ -84,28 +84,33 @@ const profileForm = () => {
     </div>
   </form>`;
 
-    divProfile.querySelector('#update').addEventListener('click', async () => {
-      const formData = new FormData(divProfile.querySelector('#formProfile'));
-      const {
-        username, full_name, website, avatar,
-      } = Object.fromEntries(formData);
+    divProfile.querySelector("#update").addEventListener("click", async () => {
+      const formData = new FormData(divProfile.querySelector("#formProfile"));
+      const { username, full_name, website, avatar } =
+        Object.fromEntries(formData);
 
-      (await updateProfile({
-        username, full_name, website, avatar,
-      }));
+      await updateProfile({
+        username,
+        full_name,
+        website,
+        avatar,
+      });
 
-        window.location.hash = "#/profile";
+      window.location.hash = "#/profile";
     });
 
     function encodeImageFileAsURL(element) {
       const file = element.files[0];
       if (file) {
-        divProfile.querySelector('#avatar_prev').src = URL.createObjectURL(file);
+        divProfile.querySelector("#avatar_prev").src =
+          URL.createObjectURL(file);
       }
     }
 
-    divProfile.querySelector('#avatar').addEventListener('change', function () { encodeImageFileAsURL(this); });
+    divProfile.querySelector("#avatar").addEventListener("change", function () {
+      encodeImageFileAsURL(this);
+    });
   });
 
   return divProfile;
-}
+};

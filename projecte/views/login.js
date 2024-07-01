@@ -1,10 +1,10 @@
-import { login } from "../models/http"
+import { login } from "../models/http";
 
 export { loginForm };
 
 function loginForm() {
-  const divLogin = document.createElement('div');
-  divLogin.classList.add('formulari_centrat');
+  const divLogin = document.createElement("div");
+  divLogin.classList.add("formulari_centrat");
 
   divLogin.innerHTML = `  <form>
   <div class="mb-3">
@@ -25,15 +25,21 @@ function loginForm() {
   <div id="errors"></div>
   </form>`;
 
-  divLogin.querySelector('#loginbutton').addEventListener('click', async (event) => {
-    event.preventDefault();
-    const email = divLogin.querySelector('#loginemail').value;
-    const password = divLogin.querySelector('#loginpassword').value;
-    login(email, password).then((status) => {
-      if (status.success) window.location.hash = '#/';
-        
-    }).catch(error => divLogin.querySelector('#errors').innerHTML = error.errorText);
-  });
+  divLogin
+    .querySelector("#loginbutton")
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
+      const email = divLogin.querySelector("#loginemail").value;
+      const password = divLogin.querySelector("#loginpassword").value;
+      login(email, password)
+        .then((status) => {
+          if (status.success) window.location.hash = "#/";
+        })
+        .catch(
+          (error) =>
+            (divLogin.querySelector("#errors").innerHTML = error.errorText),
+        );
+    });
 
   /*divLogin.querySelector('#forgotPassword').addEventListener('click', (event) => {
     event.preventDefault();

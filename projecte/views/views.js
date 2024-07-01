@@ -1,6 +1,6 @@
 import { fromEvent, map, distinctUntilChanged, debounceTime, tap } from "rxjs";
 //import { getMovies } from "../models/movies";
-import {state} from "../models/state";
+import { state } from "../models/state";
 
 export { buildMoviesComponent, buildMenu };
 
@@ -53,25 +53,32 @@ const buildMenu = () => {
       distinctUntilChanged(), //Para evitar keyups en teclas que no cambian el value
       debounceTime(300), // Para no saturar la búsqueda en Supabase
     )
-    .subscribe((searchText) => state.next({search: searchText.length > 0 ? `&title=ilike.*${searchText}*` : '', route: {... state.getValue().route}}));
+    .subscribe((searchText) =>
+      state.next({
+        search: searchText.length > 0 ? `&title=ilike.*${searchText}*` : "",
+        route: { ...state.getValue().route },
+      }),
+    );
   return divWrapper.querySelector("nav");
 };
 
 const buildMoviesComponent = (movies) => {
   const divWrapper = document.createElement("div");
   divWrapper.classList.add("accordion");
-  divWrapper.innerHTML = `
+  divWrapper.innerHTML =
+    `
   <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item active" aria-current="page">Movies</li>
-    ${'criteria' in  state.getValue().route ? `<li class="breadcrumb-item active" aria-current="page">${state.getValue().route.value}</li>` : '<li class="breadcrumb-item active" aria-current="page">All</li>' }
-    ${state.getValue().search != '' ? `<li class="breadcrumb-item active" aria-current="page">${state.getValue().search}</li>` : '' }
+    ${"criteria" in state.getValue().route ? `<li class="breadcrumb-item active" aria-current="page">${state.getValue().route.value}</li>` : '<li class="breadcrumb-item active" aria-current="page">All</li>'}
+    ${state.getValue().search != "" ? `<li class="breadcrumb-item active" aria-current="page">${state.getValue().search}</li>` : ""}
   </ol>
 </nav>
 
-  `+movies
-    .map(
-      (m, index) => `<div class="accordion-item">
+  ` +
+    movies
+      .map(
+        (m, index) => `<div class="accordion-item">
    
 <h2 class="accordion-header" id="panelsStayOpen-heading${index}">
 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse${index}" aria-expanded="true" aria-controls="panelsStayOpen-collapse${index}">
@@ -127,8 +134,8 @@ ${m.overview}
 </div>
 
 </div>`,
-    )
-    .join("");
+      )
+      .join("");
 
   divWrapper.querySelectorAll("button[data-genre]").forEach((button) =>
     button.addEventListener("click", () => {

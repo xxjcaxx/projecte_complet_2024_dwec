@@ -1,10 +1,10 @@
-import { registerUser } from '../services/users.js';
+import { registerUser } from "../services/users.js";
 
 export { registerForm };
 
 function registerForm() {
-  const divLogin = document.createElement('div');
-  divLogin.classList.add('formulari_centrat');
+  const divLogin = document.createElement("div");
+  divLogin.classList.add("formulari_centrat");
   divLogin.innerHTML = `  <form>
     <div class="mb-3">
       <label for="signupemail" class="form-label">Email address</label>
@@ -25,13 +25,15 @@ function registerForm() {
     <div id="errors"></div>
     </form>`;
 
-  divLogin.querySelector('#signupbtn').addEventListener('click', async (event) => {
-    event.preventDefault();
-    const email = divLogin.querySelector('#signupemail').value;
-    const password = divLogin.querySelector('#signuppassword').value;
-    const dataLogin = await registerUser(email, password);
-    console.log(dataLogin);
-  });
+  divLogin
+    .querySelector("#signupbtn")
+    .addEventListener("click", async (event) => {
+      event.preventDefault();
+      const email = divLogin.querySelector("#signupemail").value;
+      const password = divLogin.querySelector("#signuppassword").value;
+      const dataLogin = await registerUser(email, password);
+      console.log(dataLogin);
+    });
 
   return divLogin;
 }

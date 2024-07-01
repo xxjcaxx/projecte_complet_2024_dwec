@@ -28,7 +28,7 @@ describe("http service", () => {
       server.listen({
         onUnhandledRequest: "bypass",
       });
-      (await _http.login(env.EMAIL, env.PASSWORD));
+      await _http.login(env.EMAIL, env.PASSWORD);
     });
     afterAll(() => server.close());
 
@@ -130,17 +130,51 @@ describe("http service", () => {
   });
 
   describe("user management", async () => {
-
-    const responseOk = {"id":"8662025a-25be-4777-ae54-66cb6e58929e","aud":"authenticated","role":"authenticated","email":"test@gmail.com","phone":"","confirmation_sent_at":"2024-06-28T14:39:09.806587958Z","app_metadata":{"provider":"email","providers":["email"]},"user_metadata":{"email":"test@gmail.com","email_verified":false,"phone_verified":false,"sub":"8662025a-25be-4777-ae54-66cb6e58929e"},"identities":[{"identity_id":"209fd965-9ea1-4b16-8e1d-4ce200dfd400","id":"8662025a-25be-4777-ae54-66cb6e58929e","user_id":"8662025a-25be-4777-ae54-66cb6e58929e","identity_data":{"email":"test@gmail.com","email_verified":false,"phone_verified":false,"sub":"8662025a-25be-4777-ae54-66cb6e58929e"},"provider":"email","last_sign_in_at":"2024-06-28T14:39:09.786271233Z","created_at":"2024-06-28T14:39:09.786321Z","updated_at":"2024-06-28T14:39:09.786321Z","email":"test@gmail.com"}],"created_at":"2024-06-28T14:39:09.756356Z","updated_at":"2024-06-28T14:39:11.379383Z","is_anonymous":false};
+    const responseOk = {
+      id: "8662025a-25be-4777-ae54-66cb6e58929e",
+      aud: "authenticated",
+      role: "authenticated",
+      email: "test@gmail.com",
+      phone: "",
+      confirmation_sent_at: "2024-06-28T14:39:09.806587958Z",
+      app_metadata: { provider: "email", providers: ["email"] },
+      user_metadata: {
+        email: "test@gmail.com",
+        email_verified: false,
+        phone_verified: false,
+        sub: "8662025a-25be-4777-ae54-66cb6e58929e",
+      },
+      identities: [
+        {
+          identity_id: "209fd965-9ea1-4b16-8e1d-4ce200dfd400",
+          id: "8662025a-25be-4777-ae54-66cb6e58929e",
+          user_id: "8662025a-25be-4777-ae54-66cb6e58929e",
+          identity_data: {
+            email: "test@gmail.com",
+            email_verified: false,
+            phone_verified: false,
+            sub: "8662025a-25be-4777-ae54-66cb6e58929e",
+          },
+          provider: "email",
+          last_sign_in_at: "2024-06-28T14:39:09.786271233Z",
+          created_at: "2024-06-28T14:39:09.786321Z",
+          updated_at: "2024-06-28T14:39:09.786321Z",
+          email: "test@gmail.com",
+        },
+      ],
+      created_at: "2024-06-28T14:39:09.756356Z",
+      updated_at: "2024-06-28T14:39:11.379383Z",
+      is_anonymous: false,
+    };
 
     const server = setupServer(
       http.post(
         "https://ygvtpucoxveebizknhat.supabase.co/auth/v1/signup",
         // eslint-disable-next-line
-        async ({request}) => {
+        async ({ request }) => {
           let peticion = await request.text();
           console.log(peticion);
-          if (peticion == `{"email":"test@gmail.com","password":"passwd"}`){
+          if (peticion == `{"email":"test@gmail.com","password":"passwd"}`) {
             return HttpResponse.json(responseOk);
           }
           return HttpResponse.json([`mal`]);
@@ -150,18 +184,17 @@ describe("http service", () => {
     beforeAll(() => {
       server.listen({
         onUnhandledRequest(request) {
-          console.log('Unhandled %s %s', request.method, request.url)
+          console.log("Unhandled %s %s", request.method, request.url);
         },
       });
     });
     afterAll(() => server.close());
 
     test("signup should send a valid json with user data", async () => {
-      let signupPromise = await _http.signup("test@gmail.com","passwd");
+      let signupPromise = await _http.signup("test@gmail.com", "passwd");
       let data = await _http.getData(signupPromise);
       expect(data).toEqual(responseOk);
     });
-
   });
 });
 
@@ -190,7 +223,7 @@ describe("Movies model", () => {
     let result = _movies.stringToArray(complexArray);
     expect(result).toBeInstanceOf(Array);
     expect(result.length).toBe(21);
-    expect(result[9]).toBe(`Club d'Investissement Média`); // El complicado por la ' 
+    expect(result[9]).toBe(`Club d'Investissement Média`); // El complicado por la '
   });
 
   test("parseMovies should return an Array of movies with arrays parsed", () => {
@@ -230,7 +263,7 @@ describe("Movies model", () => {
     test("getMovies should return an Observable that returns an array of parsed movies", async () => {
       _movies.getMovies();
       expect(_movies.moviesSubject).toBeInstanceOf(Observable);
-      _movies.moviesSubject.subscribe(movies => {
+      _movies.moviesSubject.subscribe((movies) => {
         expect(movies).toBeInstanceOf(Array);
         expect(movies.length).toBe(4);
         expect(movies[0].genre).toBeInstanceOf(Array);

@@ -4,12 +4,12 @@ import { _ } from "../utils/functionals";
 // eslint-disable-next-line no-unused-vars
 import { from, tap, map, switchMap, Subject } from "rxjs";
 
-const stringToArray = (string) => string
-  .split(',')
-  .map(S => S.replace(/[\\[\]"]/g, '')
-    .replace(/^[ ']+/g, '')
-    .replace(/'$/g, ''));
-
+const stringToArray = (string) =>
+  string.split(",").map((S) =>
+    S.replace(/[\\[\]"]/g, "")
+      .replace(/^[ ']+/g, "")
+      .replace(/'$/g, ""),
+  );
 
 const parseArrays = (movie) => {
   const movieCopy = structuredClone(movie);
