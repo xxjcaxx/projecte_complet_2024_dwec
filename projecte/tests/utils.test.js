@@ -5,11 +5,13 @@
 import { describe, expect, test, beforeAll, afterAll } from "vitest";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
+import { env } from "../environment";
 
 import * as _http from "../models/http";
 import * as _views from "../views/views";
 import * as _movies from "../models/movies";
 import { exampleMovies } from "./examplemovies";
+import { Observable } from "rxjs";
 
 describe("http service", () => {
   describe("getSupabase", async () => {
@@ -22,14 +24,15 @@ describe("http service", () => {
         },
       ),
     );
-    beforeAll(() => {
+    beforeAll(async () => {
       server.listen({
         onUnhandledRequest: "bypass",
       });
+      (await _http.login(env.EMAIL, env.PASSWORD));
     });
     afterAll(() => server.close());
 
-    test("getSupabase should return a promise", () => {
+    test("getSupabase should return a observable", () => {
       let getSupabasePromise = _http.getSupabase("movies");
       expect(getSupabasePromise).toBeInstanceOf(Promise);
     });
@@ -43,6 +46,14 @@ describe("http service", () => {
       let response = await getSupabasePromise;
       expect(response.status).toBe(200);
       expect(response.statusText).toBe("OK");
+    });
+    test("getSupabase should return some movies", async () => {
+      let getSupabasePromise = _http.getSupabase("movies");
+      let response = await getSupabasePromise;
+      let data = await _http.getData(response);
+      expect(response.status).toBe(200);
+      expect(response.statusText).toBe("OK");
+      expect(data.length).toBeGreaterThan(0);
     });
     test("getSupabase with bad url should return an error", async () => {
       try {
@@ -106,7 +117,7 @@ describe("http service", () => {
     });
     afterAll(() => server.close());
 
-    test("getData should return a promise", async () => {
+    test("getData should return a observable", async () => {
       let getSupabasePromise = await _http.getSupabase("movies");
       let data = _http.getData(getSupabasePromise);
       expect(data).toBeInstanceOf(Promise);
@@ -116,6 +127,41 @@ describe("http service", () => {
       let data = await _http.getData(getSupabasePromise);
       expect(data).toEqual([exampleMovie]);
     });
+  });
+
+  describe("user management", async () => {
+
+    const responseOk = {"id":"8662025a-25be-4777-ae54-66cb6e58929e","aud":"authenticated","role":"authenticated","email":"test@gmail.com","phone":"","confirmation_sent_at":"2024-06-28T14:39:09.806587958Z","app_metadata":{"provider":"email","providers":["email"]},"user_metadata":{"email":"test@gmail.com","email_verified":false,"phone_verified":false,"sub":"8662025a-25be-4777-ae54-66cb6e58929e"},"identities":[{"identity_id":"209fd965-9ea1-4b16-8e1d-4ce200dfd400","id":"8662025a-25be-4777-ae54-66cb6e58929e","user_id":"8662025a-25be-4777-ae54-66cb6e58929e","identity_data":{"email":"test@gmail.com","email_verified":false,"phone_verified":false,"sub":"8662025a-25be-4777-ae54-66cb6e58929e"},"provider":"email","last_sign_in_at":"2024-06-28T14:39:09.786271233Z","created_at":"2024-06-28T14:39:09.786321Z","updated_at":"2024-06-28T14:39:09.786321Z","email":"test@gmail.com"}],"created_at":"2024-06-28T14:39:09.756356Z","updated_at":"2024-06-28T14:39:11.379383Z","is_anonymous":false};
+
+    const server = setupServer(
+      http.post(
+        "https://ygvtpucoxveebizknhat.supabase.co/auth/v1/signup",
+        // eslint-disable-next-line
+        async ({request}) => {
+          let peticion = await request.text();
+          console.log(peticion);
+          if (peticion == `{"email":"test@gmail.com","password":"passwd"}`){
+            return HttpResponse.json(responseOk);
+          }
+          return HttpResponse.json([`mal`]);
+        },
+      ),
+    );
+    beforeAll(() => {
+      server.listen({
+        onUnhandledRequest(request) {
+          console.log('Unhandled %s %s', request.method, request.url)
+        },
+      });
+    });
+    afterAll(() => server.close());
+
+    test("signup should send a valid json with user data", async () => {
+      let signupPromise = await _http.signup("test@gmail.com","passwd");
+      let data = await _http.getData(signupPromise);
+      expect(data).toEqual(responseOk);
+    });
+
   });
 });
 
@@ -144,6 +190,7 @@ describe("Movies model", () => {
     let result = _movies.stringToArray(complexArray);
     expect(result).toBeInstanceOf(Array);
     expect(result.length).toBe(21);
+    expect(result[9]).toBe(`Club d'Investissement Média`); // El complicado por la ' 
   });
 
   test("parseMovies should return an Array of movies with arrays parsed", () => {
@@ -180,16 +227,14 @@ describe("Movies model", () => {
       });
     });
     afterAll(() => server.close());
-    /*test("getMovies should return a promise that returns an array of parsed movies", async () => {
-      let promise = _movies.getMovies();
-      expect(promise).toBeInstanceOf(Promise);
-      let movies = await promise;
-      expect(movies).toBeInstanceOf(Array);
-      expect(movies.length).toBe(4);
-      expect(movies[0].genre).toBeInstanceOf(Array);
-    });*/
-    test("getMovies should return a promise that returns an array of parsed movies", async () => {
-      expect(1).toBe(1);
+    test("getMovies should return an Observable that returns an array of parsed movies", async () => {
+      _movies.getMovies();
+      expect(_movies.moviesSubject).toBeInstanceOf(Observable);
+      _movies.moviesSubject.subscribe(movies => {
+        expect(movies).toBeInstanceOf(Array);
+        expect(movies.length).toBe(4);
+        expect(movies[0].genre).toBeInstanceOf(Array);
+      });
     });
   });
 });

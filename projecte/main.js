@@ -2,10 +2,10 @@ import "./styles.scss";
 // eslint-disable-next-line no-unused-vars
 import * as bootstrap from "bootstrap";
 import { buildMenu, buildMoviesComponent } from "./views/views";
-//import { exampleMovies } from "./tests/examplemovies";
-//import { getData, getSupabase } from "./models/http";
 import { getMovies, moviesSubject } from "./models/movies";
 import {state} from "./models/state";
+import { loginForm } from "./views/login";
+import { profileForm } from "./views/profile";
 
 const fillElement = (container) => (content) => {
   container.innerHTML = "";
@@ -15,7 +15,7 @@ const fillElement = (container) => (content) => {
 let subscription = null;
 
 
-let stateSubscription = state.subscribe(currentState => {
+state.subscribe(currentState => {
   getMovies(`${ 'criteria' in currentState.route ? `${currentState.route.criteria}=ilike.*${currentState.route.value}*` : '' }${currentState.search}`);
 });
 
@@ -49,6 +49,12 @@ const router = async (route, container) => {
           fillContainer(buildMoviesComponent(movies));
         });
         break;
+      case "#/login":
+          fillContainer(loginForm());
+          break;
+      case "#/profile":
+            fillContainer(profileForm());
+            break;
       // Añadir más rutas según sea necesario
       default:
         console.log("404 page not found");

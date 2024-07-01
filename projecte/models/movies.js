@@ -4,14 +4,12 @@ import { _ } from "../utils/functionals";
 // eslint-disable-next-line no-unused-vars
 import { from, tap, map, switchMap, Subject } from "rxjs";
 
-const stringToArray = (string) => {
+const stringToArray = (string) => string
+  .split(',')
+  .map(S => S.replace(/[\\[\]"]/g, '')
+    .replace(/^[ ']+/g, '')
+    .replace(/'$/g, ''));
 
-  let convertedString = string
-    .replace(/'/g, '"')
-    .replace(/"([^"]*)",/g, (match) => { console.log(match); return match.replace(/'/g, "\\'"); });
-    console.log(string,convertedString);
-  return JSON.parse(convertedString);
-};
 
 const parseArrays = (movie) => {
   const movieCopy = structuredClone(movie);
